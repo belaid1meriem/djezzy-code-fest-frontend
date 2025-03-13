@@ -18,14 +18,14 @@ function LandingPage() {
         {/* Hero Section */}
         <section id='hero' className='flex flex-col gap-8 p-10 py-4 items-center justify-center'>
           <BlurFade delay={0.25} inView>
-            <h1 className='md:text-8xl text-6xl font-extrabold text-center py-6'>
+            <h1 className='md:text-8xl text-4xl font-extrabold text-center py-6'>
               Empowering Communities, <br />  
               <span className='text-primary'>One Volunteer at a Time</span>
             </h1>
           </BlurFade>
 
           <BlurFade delay={0.5} inView>
-            <p className='max-w-prose text-center md:text-2xl text-lg py-6'>
+            <p className='max-w-prose text-center md:text-2xl py-6'>
               Discover volunteer opportunities, connect with like-minded individuals, 
               and make an impact in your community. Join us today!
             </p>
@@ -49,7 +49,7 @@ function LandingPage() {
           {/* Interactive Map Feature */}
           <BlurFade className='flex items-center justify-center' inViewMargin='-40%' inView>
             <Card className='lg:w-[50%] w-[80%]'>
-              <CardHeader className='flex items-center justify-center gap-4'>
+              <CardHeader className='flex items-center justify-center flex-col gap-4'>
                 <CardTitle className='bg-primary border rounded-full text-white text-2xl h-14 w-14 flex items-center justify-center'>
                   <MapPin />
                 </CardTitle>
@@ -68,7 +68,7 @@ function LandingPage() {
           {/* Social Community Feature */}
           <BlurFade className='flex items-center justify-center' inViewMargin='-40%' inView>
             <Card className='lg:w-[50%] w-[80%]'>
-              <CardHeader className='flex items-center justify-center gap-4'>
+              <CardHeader className='flex items-center justify-center flex-col gap-4'>
                 <CardTitle className='bg-primary border rounded-full text-white text-2xl h-14 w-14 flex items-center justify-center'>
                   <Users />
                 </CardTitle>
@@ -87,7 +87,7 @@ function LandingPage() {
           {/* Leaderboard & Rankings Feature */}
           <BlurFade className='flex items-center justify-center' inViewMargin='-40%' inView>
             <Card className='lg:w-[50%] w-[80%]'>
-              <CardHeader className='flex items-center justify-center gap-4'>
+              <CardHeader className='flex items-center justify-center flex-col gap-4'>
                 <CardTitle className='bg-primary border rounded-full text-white text-2xl h-14 w-14 flex items-center justify-center'>
                   <Trophy />
                 </CardTitle>
@@ -106,7 +106,7 @@ function LandingPage() {
           {/* Organizer Dashboard Feature */}
           <BlurFade className='flex items-center justify-center' inViewMargin='-40%' inView>
             <Card className='lg:w-[50%] w-[80%]'>
-              <CardHeader className='flex items-center justify-center gap-4'>
+              <CardHeader className='flex items-center justify-center flex-col gap-4'>
                 <CardTitle className='bg-primary border rounded-full text-white text-2xl h-14 w-14 flex items-center justify-center'>
                   <LayoutDashboard />
                 </CardTitle>
