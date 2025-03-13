@@ -1,6 +1,14 @@
 import { Button } from "../components/ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router";
+import {  MapIcon } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export default function Header() {
   const [darkMode, setDarkMode] = useState(()=>{
@@ -22,8 +30,17 @@ export default function Header() {
         
         <a href="/" className="text-5xl font-semibold font-logo">سبيل</a>
         
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center justify-center gap-4">
           
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger><Link to='map' ><Button variant={'ghost'}><MapIcon/></Button></Link></TooltipTrigger>
+              <TooltipContent>
+                <p>Check available events</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+
           <Button variant="ghost" onClick={toggleTheme} size="icon">
             {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>

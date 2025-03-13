@@ -1,3 +1,4 @@
+import { Link } from 'react-router';
 import { MapPin, Users, Trophy, LayoutDashboard } from 'lucide-react';
 import { InteractiveHoverButton } from '../components/magicui/interactive-hover-button';
 import {
@@ -32,9 +33,11 @@ function LandingPage() {
           </BlurFade>
 
           <BlurFade inView>
-            <InteractiveHoverButton className='my-6'>
-              Get Started
-            </InteractiveHoverButton>
+            <Link to='/auth'>
+              <InteractiveHoverButton className='my-6'>
+                Get Started
+              </InteractiveHoverButton>
+            </Link>
           </BlurFade>
         </section>
 
@@ -139,9 +142,11 @@ function LandingPage() {
           </BlurFade>
 
           <BlurFade delay={0.5} inView>
-            <InteractiveHoverButton className='my-6'>
-              Get Started
-            </InteractiveHoverButton>
+            <Link to='/auth'>
+              <InteractiveHoverButton className='my-6'>
+                Get Started
+              </InteractiveHoverButton>
+            </Link>
           </BlurFade>
         </section>
 
