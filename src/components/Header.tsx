@@ -34,7 +34,7 @@ export default function Header() {
           
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger><Link to='map' ><Button variant={'ghost'}><MapIcon/></Button></Link></TooltipTrigger>
+              <TooltipTrigger><Link to='/map'><MapIcon className="size-4.5"/></Link></TooltipTrigger>
               <TooltipContent>
                 <p>Check available events</p>
               </TooltipContent>
