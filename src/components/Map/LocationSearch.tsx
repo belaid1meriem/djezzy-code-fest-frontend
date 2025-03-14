@@ -5,9 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-const MAPBOX_ACCESS_TOKEN = "pk.eyJ1IjoibW1iZWxhaWQiLCJhIjoiY2x5c2t6eWNyMGR1ajJpc2h3aTVrdjFzciJ9.4GCWWfr4RB4PwaFxb7G1Gg"; // Replace with your token
 
-const geocodingClient = mbxGeocoding({ accessToken: MAPBOX_ACCESS_TOKEN });
+const geocodingClient = mbxGeocoding({ accessToken: import.meta.env.VITE_MAPBOX_TOKEN });
 
 const LocationSearch: React.FC<{ onSelect: (coords: { lat: number; lng: number }) => void, className: string }> = ({ onSelect, className }) => {
   const [query, setQuery] = useState("");
@@ -20,7 +19,7 @@ const LocationSearch: React.FC<{ onSelect: (coords: { lat: number; lng: number }
         .forwardGeocode({
           query,
           autocomplete: true,
-          limit: 20,
+          limit: 100,
         })
         .send();
 
@@ -62,6 +61,7 @@ const LocationSearch: React.FC<{ onSelect: (coords: { lat: number; lng: number }
                 onClick={() => {
                   onSelect({ lat: place.center[1], lng: place.center[0] });
                   setResults([]);
+                  setQuery(place.place_name);
                 }}
               >
                 {place.place_name}

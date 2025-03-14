@@ -4,7 +4,6 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { useState } from "react";
 import { useTheme } from "../../contexts/ThemeContext";
 
-const MAPBOX_TOKEN = "pk.eyJ1IjoibW1iZWxhaWQiLCJhIjoiY2x5c2t6eWNyMGR1ajJpc2h3aTVrdjFzciJ9.4GCWWfr4RB4PwaFxb7G1Gg"; // Replace with your token
 
 function MapComponent() {
   const { isDarkMode } = useTheme();
@@ -18,7 +17,7 @@ function MapComponent() {
     setViewport({
       latitude: coords.lat,
       longitude: coords.lng,
-      zoom: 20, // Zoom in on selection
+      zoom: 15, // Zoom in on selection
     });
   };
   
@@ -26,7 +25,7 @@ function MapComponent() {
     <div className="h-screen w-full relative">
       <LocationSearch onSelect={handleLocationSelect} className="absolute top-3 left-3 z-20" />
       <Map
-        mapboxAccessToken={MAPBOX_TOKEN}
+        mapboxAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
         {...viewport}
         onMove={evt => setViewport(evt.viewState)}
         style={{ width: "100%", height: "100%" }}
