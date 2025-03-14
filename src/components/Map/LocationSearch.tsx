@@ -6,8 +6,9 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, PaletteIcon } from "lucide-react";
 import { format } from "date-fns";
+import axios from "axios"
 
 const geocodingClient = mbxGeocoding({ accessToken: import.meta.env.VITE_MAPBOX_TOKEN });
 
@@ -15,12 +16,12 @@ const LocationSearch: React.FC<{ onSelect: (coords: { lat: number; lng: number }
   const [query, setQuery] = useState<string>("");
   const [results, setResults] = useState<{ place_name: string; center: [number, number] }[]>([]);
   const [showFilters, setShowFilters] = useState(false); // Toggle filters
-
+  const [loading, setLoading] = useState(false);
   // Filters state
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<{radius: number; category: string; eventDate: string}>({
     radius: 5,
     category: "",
-    eventDate: format(new Date(), "yyyy-MM-dd"),
+    eventDate: "",
   });
 
   // Function to update filters dynamically
@@ -28,10 +29,32 @@ const LocationSearch: React.FC<{ onSelect: (coords: { lat: number; lng: number }
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleSelect = (place: { place_name: string; center: [number, number] } ) => {
-    onSelect({ lat: place.center[1], lng: place.center[0] });
-    setResults([]);
-    setQuery(place.place_name);
+  const handleSearchList = async (place: { place_name: string; center: [number, number] } ) => {
+    handleSearch(query, setResults)
+    const queryString = generateSearchQuery(place.center, filters)
+    try {
+      const events = await axios.get(import.meta.env.VITE_BACKEND+'/events/nearbySearchcharities/'+queryString)
+      console.log(events.data)
+    }
+    catch (error) {
+      console.error(error)
+    }
+    finally{
+      onSelect({ lat: place.center[1], lng: place.center[0] });
+      setResults([]);
+      setQuery(place.place_name);
+      setLoading(false);
+      }
+   
+  }
+
+  const handleSearchBtn = async (query: string, setResults: React.Dispatch<React.SetStateAction<{ place_name: string; center: [number, number] }[]>>) => {
+    setLoading(true);
+    handleSearch(query, setResults)
+    const place = results[0]
+    const queryString = generateSearchQuery(place.center, filters)
+    const events = await fetchEvents(queryString,place,setResults, setQuery, onSelect, setLoading)
+
   }
   
   return (
@@ -45,7 +68,7 @@ const LocationSearch: React.FC<{ onSelect: (coords: { lat: number; lng: number }
           onChange={(e) => handleChange(e, query, setResults, setQuery)}
           className="flex-1"
         />
-        <Button onClick={() => handleSearch(query, filters, setResults)}>Search</Button>
+        <Button onClick={() => handleSearchBtn(query, setResults)} disabled={loading}>Search</Button>
       </div>
 
       {/* Filter Toggle Button */}
@@ -107,11 +130,7 @@ const LocationSearch: React.FC<{ onSelect: (coords: { lat: number; lng: number }
                 <li
                   key={index}
                   className="cursor-pointer p-3 hover:bg-gray-100"
-                  onClick={() => {
-                    onSelect({ lat: place.center[1], lng: place.center[0] });
-                    setResults([]);
-                    setQuery(place.place_name);
-                  }}
+                  onClick={() => handleSearchList(place) }
                 >
                   {place.place_name}
                 </li>
@@ -128,7 +147,6 @@ export default LocationSearch;
 
 const handleSearch = async (
   query: string,
-  filters: { radius: number; category: string; eventDate: string },
   setResults: React.Dispatch<React.SetStateAction<{ place_name: string; center: [number, number] }[]>>
 ) => {
   if (!query) return;
@@ -145,17 +163,12 @@ const handleSearch = async (
       place_name: feature.place_name,
       center: feature.center as [number, number],
     }));
-
     setResults(features);
   } catch (error) {
     console.error("Error fetching location:", error);
     alert("Error fetching location, Try reloading the page.");
   }
 };
-
-const handleEventSearch = () => {
-
-}
 
 const handleChange = (
   e: React.ChangeEvent<HTMLInputElement>,
@@ -164,6 +177,42 @@ const handleChange = (
   setQuery: React.Dispatch<React.SetStateAction<string>>
 ) => {
   setQuery(e.target.value);
-  handleSearch(query, { radius: 5, category: "", eventDate: "" }, setResults);
+  handleSearch(query, setResults);
 };
 
+const generateSearchQuery = (center: [number, number], filter: {radius: number; category: string; eventDate: string}): string => {
+  const params = new URLSearchParams();
+
+  if (center[1] !== null && center[1] !== undefined) params.append("lat", center[1].toString());
+  if (center[0] !== null && center[0] !== undefined) params.append("lng", center[0].toString());
+  if (filter.radius) params.append("radius", filter.radius.toString());
+  if (filter.eventDate) params.append("event_date", filter.eventDate);
+  if (filter.category) params.append("category", filter.category);
+
+  return `?${params.toString()}`;
+};
+
+const fetchEvents = async (
+  queryString: string,
+  place: { place_name: string; center: [number, number] },
+  setResults: React.Dispatch<React.SetStateAction<{ place_name: string; center: [number, number] }[]>>,
+  setQuery: React.Dispatch<React.SetStateAction<string>>,
+  onSelect: (coords: { lat: number; lng: number }) => void,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  let events: any;
+  try {
+    events = await axios.get(import.meta.env.VITE_BACKEND+'/events/nearbySearchcharities/'+queryString)
+    console.log(events.data)
+  }
+  catch (error) {
+    console.error(error)
+  }
+  finally{
+    setResults([]);
+    onSelect({ lat: place.center[1], lng: place.center[0] });
+    setQuery(place.place_name);
+    setLoading(false);
+  }
+  return events.data
+}
