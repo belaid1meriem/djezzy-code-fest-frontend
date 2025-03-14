@@ -6,4 +6,5 @@ export default interface _Event {
   description: string;
   date: string; // ISO 8601 date format
   charity: number;
+  charity_name: string;
 }

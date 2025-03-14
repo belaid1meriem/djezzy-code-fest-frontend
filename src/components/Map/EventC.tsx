@@ -37,7 +37,7 @@ const EventC: FC<EventCProps> = ({ event, closeEvent }) => {
           <div className="flex items-center space-x-2 text-sm">
             <Heart className="w-5 h-5 text-red-500" />
             <span className="">
-              Charity ID: {event.charity}
+              Charity: {event.charity_name}
             </span>
           </div>
 
