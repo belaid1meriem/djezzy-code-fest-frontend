@@ -6,13 +6,13 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { ChevronDown, ChevronUp, PaletteIcon } from "lucide-react";
-import { format } from "date-fns";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import axios from "axios"
+import _Event from "@/models/Event";
 
 const geocodingClient = mbxGeocoding({ accessToken: import.meta.env.VITE_MAPBOX_TOKEN });
 
-const LocationSearch: React.FC<{ onSelect: (coords: { lat: number; lng: number }) => void; className: string }> = ({ onSelect, className }) => {
+const LocationSearch: React.FC<{ onSelect: (coords: { lat: number; lng: number }, events: _Event[]) => void; className: string }> = ({ onSelect, className }) => {
   const [query, setQuery] = useState<string>("");
   const [results, setResults] = useState<{ place_name: string; center: [number, number] }[]>([]);
   const [showFilters, setShowFilters] = useState(false); // Toggle filters
@@ -30,31 +30,19 @@ const LocationSearch: React.FC<{ onSelect: (coords: { lat: number; lng: number }
   };
 
   const handleSearchList = async (place: { place_name: string; center: [number, number] } ) => {
-    handleSearch(query, setResults)
+    if(!place) return
+    setLoading(true);
+    await handleSearch(query, setResults)
     const queryString = generateSearchQuery(place.center, filters)
-    try {
-      const events = await axios.get(import.meta.env.VITE_BACKEND+'/events/nearbySearchcharities/'+queryString)
-      console.log(events.data)
-    }
-    catch (error) {
-      console.error(error)
-    }
-    finally{
-      onSelect({ lat: place.center[1], lng: place.center[0] });
-      setResults([]);
-      setQuery(place.place_name);
-      setLoading(false);
-      }
-   
+    await fetchEvents(queryString,place,setResults, setQuery, onSelect, setLoading)
   }
 
   const handleSearchBtn = async (query: string, setResults: React.Dispatch<React.SetStateAction<{ place_name: string; center: [number, number] }[]>>) => {
     setLoading(true);
-    handleSearch(query, setResults)
-    const place = results[0]
+    const location = await handleSearch(query, setResults)
+    const place = location ? location : results[0]
     const queryString = generateSearchQuery(place.center, filters)
-    const events = await fetchEvents(queryString,place,setResults, setQuery, onSelect, setLoading)
-
+    await fetchEvents(queryString,place,setResults, setQuery, onSelect, setLoading)
   }
   
   return (
@@ -164,6 +152,7 @@ const handleSearch = async (
       center: feature.center as [number, number],
     }));
     setResults(features);
+    return features[0];
   } catch (error) {
     console.error("Error fetching location:", error);
     alert("Error fetching location, Try reloading the page.");
@@ -197,7 +186,7 @@ const fetchEvents = async (
   place: { place_name: string; center: [number, number] },
   setResults: React.Dispatch<React.SetStateAction<{ place_name: string; center: [number, number] }[]>>,
   setQuery: React.Dispatch<React.SetStateAction<string>>,
-  onSelect: (coords: { lat: number; lng: number }) => void,
+  onSelect: (coords: { lat: number; lng: number }, events: _Event[]) => void,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   let events: any;
@@ -210,9 +199,8 @@ const fetchEvents = async (
   }
   finally{
     setResults([]);
-    onSelect({ lat: place.center[1], lng: place.center[0] });
+    onSelect({ lat: place.center[1], lng: place.center[0] }, events.data);
     setQuery(place.place_name);
     setLoading(false);
-  }
-  return events.data
+  } 
 }
