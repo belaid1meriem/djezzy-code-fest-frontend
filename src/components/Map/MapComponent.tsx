@@ -1,12 +1,13 @@
-
 import Map, { Marker } from "react-map-gl/mapbox-legacy";
 import LocationSearch from "./LocationSearch";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useState } from "react";
+import { useTheme } from "../../contexts/ThemeContext";
 
 const MAPBOX_TOKEN = "pk.eyJ1IjoibW1iZWxhaWQiLCJhIjoiY2x5c2t6eWNyMGR1ajJpc2h3aTVrdjFzciJ9.4GCWWfr4RB4PwaFxb7G1Gg"; // Replace with your token
 
 function MapComponent() {
+  const { isDarkMode } = useTheme();
   const [viewport, setViewport] = useState({
     longitude: 2.3522, // Default to Paris
     latitude: 48.8566,
@@ -29,8 +30,7 @@ function MapComponent() {
         {...viewport}
         onMove={evt => setViewport(evt.viewState)}
         style={{ width: "100%", height: "100%" }}
-        mapStyle="mapbox://styles/mapbox/streets-v11" // Change styles here
-      >
+        mapStyle={isDarkMode ? "mapbox://styles/mapbox/dark-v11" : "mapbox://styles/mapbox/streets-v11"}      >
         <Marker longitude={viewport.longitude} latitude={viewport.latitude} color="red" />
       </Map>
     </div>

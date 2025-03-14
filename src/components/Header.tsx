@@ -1,28 +1,16 @@
 import { Button } from "../components/ui/button";
-import { Moon, Sun } from "lucide-react";
-import { useState } from "react";
-import { Link } from "react-router";
-import {  MapIcon } from "lucide-react";
+import { Moon, Sun, MapIcon } from "lucide-react";
+import { Link } from "react-router"; 
+import { useTheme } from "../contexts/ThemeContext"; 
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
+} from "@/components/ui/tooltip";
 
 export default function Header() {
-  const [darkMode, setDarkMode] = useState(()=>{
-    const dark = localStorage.getItem("dark");
-    const enableDarkMode = dark ? dark=== "true" : false; 
-    document.documentElement.classList.toggle("dark", enableDarkMode);
-    return enableDarkMode;
-  });
-
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle("dark");
-    setDarkMode(!darkMode);
-    localStorage.setItem("dark", JSON.stringify(!darkMode));
-  };
+  const { isDarkMode, toggleTheme } = useTheme(); // Use ThemeContext
 
   return (
     <header className="w-full border-b bg-background/60 sticky top-0 backdrop-blur-md z-10">
@@ -30,19 +18,22 @@ export default function Header() {
         
         <a href="/" className="text-5xl font-semibold font-logo">سبيل</a>
         
-        <div className="flex items-center justify-center gap-4">
-          
+        <div className="flex items-center gap-4">
           <TooltipProvider>
             <Tooltip>
-              <TooltipTrigger><Link to='/map'><MapIcon className="size-4.5"/></Link></TooltipTrigger>
+              <TooltipTrigger asChild>
+                <Link to="/map">
+                  <MapIcon className="size-4.5 cursor-pointer" />
+                </Link>
+              </TooltipTrigger>
               <TooltipContent>
                 <p>Check available events</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
 
-          <Button variant="ghost" onClick={toggleTheme} size="icon">
-            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          <Button variant="ghost" onClick={toggleTheme} size="icon" aria-label="Toggle Theme">
+            {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
           </Button>
         </div>
       </div>
