@@ -1,4 +1,4 @@
-import Map, { Marker, Popup } from "react-map-gl/mapbox-legacy";
+import Map, { Marker } from "react-map-gl/mapbox-legacy";
 import LocationSearch from "./LocationSearch";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { useState, useEffect, useRef } from "react";
