@@ -1,4 +1,3 @@
-// src/components/Posts/index.tsx
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import EventSelector from "./EventSelector";
@@ -56,7 +55,7 @@ const Posts = () => {
         content: "the iftar of today was so good , jazakoum allah khayran",
         image: undefined,
         eventId: 1,
-        createdAt: new Date(2025, 3, 20, 9, 30),
+        createdAt: new Date(2025, 2, 13, 9, 30),
         likes: [
           { id: 1, post_id: 101, user_id: "user-123", username: "Rofa" },
           { id: 2, post_id: 101, user_id: "user-456", username: "Mimi" }
@@ -68,7 +67,7 @@ const Posts = () => {
             user_id: "user-123", 
             username: "Maamar", 
             content: "Alhamdulillah, it was amazing!", 
-            createdAt: new Date(2025, 3, 20, 10, 15) 
+            createdAt: new Date(2025, 2, 14, 10, 15) 
           }
         ]
       },
