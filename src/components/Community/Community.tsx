@@ -1,6 +1,4 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Menu } from "lucide-react";
 
 // Import components
 import Sidebar from './SideBar';
@@ -20,13 +18,7 @@ export default function Community() {
       {/* Main Header */}
       <header className="p-4 border-b border-border bg-background shadow-sm">
         <div className="container mx-auto flex justify-between items-center">
-          <Button 
-            variant="ghost" 
-            className="md:hidden" 
-            onClick={toggleSidebar}
-          >
-            <Menu />
-          </Button>
+          
           
           <div className="flex items-center justify-center w-full">
             <h1 className="text-3xl font-semibold">
