@@ -1,6 +1,10 @@
 import { Card, CardHeader } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pencil } from "lucide-react";
+import { Task } from "@/models/Event";
+import { CirclePlus, Pencil } from "lucide-react";
+import { useState } from "react";
+import AddTask from "./AddTask";
+import PatchTask from "./PatchTask";
 
 interface VolunteerTask {
   id: number;
@@ -34,14 +38,21 @@ const volunteerTasks: VolunteerTask[] = [
   },
 ];
 
-export default function Tasks({className}: {className: string}) {
+export default function Tasks({className, tasks}: {className: string, tasks: Task[]}) {
+  const [showForm, setShowForm] = useState(false)
+  const [showFormEdit, setShowFormEdit] = useState(false)
+  const [selectedItem, setSelectedItem] = useState<VolunteerTask | null>(null)
   const handleEdit = (task: VolunteerTask): void => {
+    setSelectedItem(task)
+    setShowFormEdit(true)
     console.log("Edit task:", task);
   };
 
   return (
+    <>
     <Card className={`p-4 w-[90%] mx-auto ${className}`}>
       <CardHeader className="font-semibold text-center">
+       <CirclePlus className="cursor-pointer" onClick={()=> setShowForm(true)} />
         Event Tasks
       </CardHeader>
       <div className="border rounded-md">
@@ -56,7 +67,7 @@ export default function Tasks({className}: {className: string}) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {volunteerTasks.map((task) => (
+            {tasks.map((task) => (
               <TableRow key={task.id}>
                 <TableCell className="font-medium">{task.id}</TableCell>
                 <TableCell>{task.task_name}</TableCell>
@@ -74,5 +85,8 @@ export default function Tasks({className}: {className: string}) {
         </Table>
       </div>
     </Card>
+    {showForm && <AddTask closeForm={() => setShowForm(false)} />}
+    {showFormEdit && selectedItem && <PatchTask task={selectedItem} closeForm={() => setShowFormEdit(false)} />}  {/* Add Task Modal */}
+    </>
   );
 }

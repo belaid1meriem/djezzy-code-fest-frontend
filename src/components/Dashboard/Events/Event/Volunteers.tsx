@@ -1,6 +1,6 @@
 import { Card, CardHeader } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pencil } from "lucide-react";
+import { Pencil, Star } from "lucide-react";
 
 interface AssignedTask {
   user: {
@@ -88,7 +88,7 @@ const assignedTasks: AssignedTask[] = [
   },
 ];
 
-export default function Volunteers({className}: {className: string}) {
+export default function Volunteers({className, volunteers}: {className: string, volunteers: AssignedTask[]}) {
   const handleEdit = (task: AssignedTask): void => {
     console.log("Edit assigned task:", task);
   };
@@ -106,21 +106,17 @@ export default function Volunteers({className}: {className: string}) {
               <TableHead>Volunteer Name</TableHead>
               <TableHead>Task Name</TableHead>
               <TableHead>Assigned Date</TableHead>
-              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {assignedTasks.map((task) => (
+            {volunteers.map((task) => (
               <TableRow key={task.user.id + "-" + task.task.id}>
                 <TableCell className="font-medium">{task.user.email}</TableCell>
                 <TableCell>{task.user.volunteer ? task.user.volunteer.full_name : "N/A"}</TableCell>
                 <TableCell>{task.task.task_name}</TableCell>
                 <TableCell>{task.assigned_date}</TableCell>
                 <TableCell>
-                  <Pencil
-                    onClick={() => handleEdit(task)}
-                    className="cursor-pointer h-4 w-4"
-                  />
+                  <Star  size={16} className="cursor-pointer" onClick={() => 1+1} />
                 </TableCell>
               </TableRow>
             ))}

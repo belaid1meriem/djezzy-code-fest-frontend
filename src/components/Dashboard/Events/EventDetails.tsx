@@ -96,10 +96,10 @@ function EventDetails() {
       ) : (
         <div className='flex items-center justify-center'>
           <div className='grid grid-cols-3 gap-y-6 '>
-            <Volunteers className='col-span-3' />
+            <Volunteers volunteers={volunteers} className='col-span-3' />
             <EventCard event={event!} viewDetails={false} />
-            <AllocatedProducts className='col-span-2'/>
-            <Tasks className='col-span-3'/> 
+            <AllocatedProducts allocatedProducts={allocatedProducts} className='col-span-2'/>
+            <Tasks tasks={event?.tasks!} className='col-span-3'/> 
           </div>      
         </div>
       )

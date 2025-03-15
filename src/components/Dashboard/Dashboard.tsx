@@ -37,15 +37,11 @@ const data: SidebarData = {
         { title: "Stock Alerts", url: "stock/alerts" },
       ],
     },
-    {
-      title: "Tasks",
-      url: "tasks",
-    },
   ],
 };
 
 export default function Dashboard() {
-  const location = useLocation()
+  
   return (
     <SidebarProvider
       style={
