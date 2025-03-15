@@ -1,6 +1,8 @@
 import { Card, CardHeader } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pencil, Star } from "lucide-react";
+import { Star } from "lucide-react";
+import { useState } from "react";
+import AddReward from "../AddReward";
 
 interface AssignedTask {
   user: {
@@ -27,70 +29,14 @@ interface AssignedTask {
   assigned_date: string;
 }
 
-const assignedTasks: AssignedTask[] = [
-  {
-    user: {
-      id: 2,
-      email: "mr_maamar1@esi.dz",
-      role: "volunteer",
-      charity_id: null,
-      volunteer: {
-        id: 1,
-        full_name: "Rofieda M",
-        phone: "1234567890",
-        address: "Baraki - Alger",
-        points: 0,
-        user: 2,
-      },
-    },
-    task: {
-      id: 2,
-      task_name: "Dishwashing & Cleaning",
-      description: "Wash dishes, clean tables, and maintain hygiene in the kitchen and dining area.",
-      volunteer_limit: 4,
-      event: 1,
-    },
-    assigned_date: "2025-04-25",
-  },
-  {
-    user: {
-      id: 3,
-      email: "asbarroufaida@email.com",
-      role: "volunteer",
-      charity_id: 1,
-      volunteer: null,
-    },
-    task: {
-      id: 2,
-      task_name: "Dishwashing & Cleaning",
-      description: "Wash dishes, clean tables, and maintain hygiene in the kitchen and dining area.",
-      volunteer_limit: 4,
-      event: 1,
-    },
-    assigned_date: "2025-04-25",
-  },
-  {
-    user: {
-      id: 3,
-      email: "asbarroufaida@email.com",
-      role: "volunteer",
-      charity_id: 1,
-      volunteer: null,
-    },
-    task: {
-      id: 7,
-      task_name: "Water Distribution",
-      description: "Ensure every table has water",
-      volunteer_limit: 2,
-      event: 1,
-    },
-    assigned_date: "2025-04-25",
-  },
-];
+
 
 export default function Volunteers({className, volunteers}: {className: string, volunteers: AssignedTask[]}) {
-  const handleEdit = (task: AssignedTask): void => {
-    console.log("Edit assigned task:", task);
+  const [showForm, setShowForm] = useState(false)
+  const [userId, setUserId] = useState<number | null>(null)
+  const handleReward = (userId: number): void => {
+    setUserId(userId)
+    setShowForm(true)
   };
 
   return (
@@ -116,13 +62,16 @@ export default function Volunteers({className, volunteers}: {className: string, 
                 <TableCell>{task.task.task_name}</TableCell>
                 <TableCell>{task.assigned_date}</TableCell>
                 <TableCell>
-                  <Star  size={16} className="cursor-pointer" onClick={() => 1+1} />
+                  <Star  size={16} className="cursor-pointer" onClick={() => handleReward(task.user.id)} />
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
+      {showForm && userId && (
+        <AddReward closeForm={()=>setShowForm(false)} user_id={userId!} />
+      )}
     </Card>
   );
 }

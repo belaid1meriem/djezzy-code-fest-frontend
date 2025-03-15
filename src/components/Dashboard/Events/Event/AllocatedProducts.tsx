@@ -1,9 +1,8 @@
 import { Card, CardHeader } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Pencil, CirclePlus } from "lucide-react";
+import { CirclePlus } from "lucide-react";
 import { useState } from "react";
-import AddTask from "./AddTask";
-import AddAllocatedProduct from "./AddAllocatedProduct";
+
 
 interface AllocatedStockItem {
   id: number;

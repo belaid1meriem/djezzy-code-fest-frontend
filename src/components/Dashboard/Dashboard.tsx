@@ -15,7 +15,6 @@ import {
 } from "@/components/ui/sidebar"
 import { Outlet } from "react-router"
 import { SidebarData } from "@/models/Sidebar"
-import { useLocation } from "react-router"
 
 // This is sample data.
 const data: SidebarData = {
