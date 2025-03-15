@@ -10,7 +10,6 @@ import Login from "./components/Auth/Login"
 import { Toaster } from "@/components/ui/sonner"
 import Stock from "./components/Dashboard/Stock"
 import Events from "./components/Dashboard/Events"
-import Tasks from "./components/Dashboard/Tasks"
 import General from "./components/Dashboard/Stock/General"
 import AddStock from "./components/Dashboard/Stock/AddStock"
 import StockAlerts from "./components/Dashboard/Stock/StockAlerts"
@@ -45,7 +44,7 @@ function App() {
             <Route path="new" element={<AddEvent />} />
           </Route>
 
-          <Route path="tasks" element={<Tasks />} />
+          {/* <Route path="tasks" element={<Tasks />} /> */}
         </Route>
 
         <Route path="auth" element={<Auth />} />

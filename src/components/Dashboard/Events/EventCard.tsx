@@ -3,12 +3,18 @@ import _Event from "@/models/Event";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Heart, MapPin } from "lucide-react";
+import { useNavigate } from "react-router";
 
 interface EventCProps {
   event: _Event;
+  viewDetails?: boolean;
 }
 
-const EventCard: FC<EventCProps> = ({ event }) => {
+const EventCard: FC<EventCProps> = ({ event, viewDetails = true }) => {
+    const navigate = useNavigate()
+    const navigateToEvent = () => {
+        navigate(`${event.id}`)
+    };
   return (
     <Card className="w-full max-w-sm rounded-xl p-4">
         <CardHeader>
@@ -38,13 +44,13 @@ const EventCard: FC<EventCProps> = ({ event }) => {
                 Charity: {event.charity_name}
             </span>
             </div>
-
-            {/* Buttons at the bottom */}
-            <div className="flex justify-end items-end mt-4">
-                <Button variant={'outline'} >
-                    View details
-                </Button>
-            </div>
+            {viewDetails && (   
+                    <div className="flex justify-end items-end mt-4">
+                        <Button onClick={navigateToEvent} variant={'outline'} >
+                            View details
+                        </Button>
+                    </div> 
+            )}
         </CardContent>
     </Card>
 
