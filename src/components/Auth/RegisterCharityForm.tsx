@@ -45,8 +45,8 @@ export default function RegisterCharityForm({ className, ...props }: React.Compo
       toast.success("Charity registered successfully!");
       localStorage.setItem("access", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
-      localStorage.setItem("user", response.data.user);
-      navigate("/community");
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      navigate("/map");
     } catch (error) {
       toast.error("Registration failed. Try again.");
       console.log(error);

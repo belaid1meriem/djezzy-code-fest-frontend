@@ -1,6 +1,7 @@
+// src/components/Sidebar/index.tsx
 import { Dispatch, SetStateAction } from "react";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Users, X, Menu } from "lucide-react";
+import { MessageSquare, Users, X, Menu, Award } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface SidebarProps {
@@ -73,6 +74,17 @@ const Sidebar = ({
             >
               <Users className="h-5 w-5" /> 
               <span>Posts</span>
+            </button>
+            <button
+              className={`flex items-center space-x-3 w-full p-3 rounded-md transition-all ${
+                activeTab === "leaderboard" 
+                  ? 'bg-primary text-primary-foreground' 
+                  : 'hover:bg-input'
+              }`}
+              onClick={() => setActiveTab("leaderboard")}
+            >
+              <Award className="h-5 w-5" /> 
+              <span>Leaderboard</span>
             </button>
           </div>
           
