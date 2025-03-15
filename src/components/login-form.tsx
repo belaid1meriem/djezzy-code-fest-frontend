@@ -32,7 +32,7 @@ export function LoginForm({ className, ...props }: React.ComponentProps<"form">)
       localStorage.setItem("access", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
       localStorage.setItem("user", JSON.stringify(response.data.user));
-      navigate("/community")
+      navigate("/map")
     } catch (err) {
       toast.error("Invalid email or password. Please try again.");
       console.error("Login failed", err);
