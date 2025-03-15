@@ -7,14 +7,22 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
+
+const CATEGORY_CHOICES = [
+  { value: "charity", label: "Charity" },
+  { value: "restaurant_rahma", label: "Restaurant Rahma" },
+];
 
 // Zod schema for validation
 const charitySchema = z.object({
   name: z.string().min(3, "Name must be at least 3 characters"),
   description: z.string().min(10, "Description is too short"),
-  category: z.string().min(3, "Category is required"),
+  category: z.enum(["charity", "restaurant_rahma"], {
+    required_error: "Category is required",
+  }),
   location: z.string().min(5, "Location is required? minimum length is 5"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(6, "Password must be at least 6 characters"),
@@ -23,21 +31,22 @@ const charitySchema = z.object({
 type CharityForm = z.infer<typeof charitySchema>;
 
 export default function RegisterCharityForm({ className, ...props }: React.ComponentProps<"form">) {
-  const { register, handleSubmit, formState: { errors } } = useForm<CharityForm>({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<CharityForm>({
     resolver: zodResolver(charitySchema),
   });
 
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   const onSubmit = async (data: CharityForm) => {
     setLoading(true);
     try {
-      const response = await axios.post(import.meta.env.VITE_BACKEND+"/accounts/register/charity/", data);
+      const response = await axios.post(import.meta.env.VITE_BACKEND + "/accounts/register/charity/", data);
       toast.success("Charity registered successfully!");
       localStorage.setItem("access", response.data.access);
       localStorage.setItem("refresh", response.data.refresh);
       localStorage.setItem("user", response.data.user);
-      navigate("/community")
+      navigate("/community");
     } catch (error) {
       toast.error("Registration failed. Try again.");
       console.log(error);
@@ -71,7 +80,16 @@ export default function RegisterCharityForm({ className, ...props }: React.Compo
         {/* Category */}
         <div className="grid gap-2">
           <Label htmlFor="category">Category</Label>
-          <Input id="category" {...register("category")} />
+          <Select onValueChange={(value) => setValue("category", value as 'charity' | 'restaurant_rahma')}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select a category" />
+            </SelectTrigger>
+            <SelectContent>
+              {CATEGORY_CHOICES.map((option) => (
+                <SelectItem key={option.value} value={option.value}>{option.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           {errors.category && <p className="text-red-500 text-sm">{errors.category.message}</p>}
         </div>
 
