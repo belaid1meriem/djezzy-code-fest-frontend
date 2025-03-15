@@ -17,7 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="map" element={<Map />} />
-        <Route path="community" element={<Community />} />
+        <Route path="community/:event_id" element={<Community />} />
         <Route path="dashboard" element={<Dashboard />} />
 
         <Route path="auth" element={<Auth />} />
